@@ -3,14 +3,17 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace BizTalkComponents.CustomComponents.AuthHelper
 {
@@ -73,8 +76,19 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
             {
                 var response = client.PostAsync(oAuth2Url, scontent).GetAwaiter().GetResult();
                 response.EnsureSuccessStatusCode();
-                string json = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                tokenInfo = JsonConvert.DeserializeObject<TokenInfo>(json);
+                string retval = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
+                if (response.Content.Headers.ContentType == null)
+                {
+                    throw new InvalidDataException("OAuth2.0 endpoint did not return JSON format.");
+                }
+                else if (response.Content.Headers.ContentType.MediaType == "application/json")
+                {
+                    tokenInfo = JsonConvert.DeserializeObject<TokenInfo>(retval);
+                }
+                else if (response.Content.Headers.ContentType.MediaType == "application/xml")
+                {
+                    throw new InvalidDataException("OAuth2.0 endpoint returned XML format which is not supported.");
+                }
             }
             catch (Exception ex)
             {

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAuthHelper", "UnitTests\TestAuthHelper\TestAuthHelper.csproj", "{09050B4B-A709-4BD4-91C7-86AF2FD9C459}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,11 @@ Global
 		{E23E8B45-A2F0-4B31-9778-AF8642C0C88E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6448D470-6620-4891-BF3A-EE0D39B70A1E}.Debug|Any CPU.ActiveCfg = Debug
 		{6448D470-6620-4891-BF3A-EE0D39B70A1E}.Release|Any CPU.ActiveCfg = Release
+		{6448D470-6620-4891-BF3A-EE0D39B70A1E}.Release|Any CPU.Build.0 = Release
+		{09050B4B-A709-4BD4-91C7-86AF2FD9C459}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09050B4B-A709-4BD4-91C7-86AF2FD9C459}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09050B4B-A709-4BD4-91C7-86AF2FD9C459}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09050B4B-A709-4BD4-91C7-86AF2FD9C459}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

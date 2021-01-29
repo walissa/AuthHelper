@@ -13,23 +13,24 @@ using System.Threading.Tasks;
 
 namespace BizTalkComponents.CustomComponents.AuthHelper
 {
-    public class OAuthTokenSecurityBehavior : IClientMessageInspector, IEndpointBehavior
+    public class OAuthSecurityTokenBehavior : IClientMessageInspector, IEndpointBehavior
     {
 
-        private string OAuth2TokenEP;
-        private string client_Id;
-        private string client_Secret;
-        private bool cacheToken;
-        private string claims;
+        public string OAuth2TokenEndPoint { get; set; }
+        public string ClientId { get; set; }
+        public string ClientSecret { get; set; }
+        public bool CacheToken { get; set; }
+        public string Claims { get; set; }
 
-        public OAuthTokenSecurityBehavior(string oAuth2TokenEP, string clientId, string clientSecret, string claims, bool cacheToken)
+        public OAuthSecurityTokenBehavior(string oAuth2TokenEndPoint, string clientId, string clientSecret, string claims, bool cacheToken)
         {
-            this.claims = claims;
-            this.OAuth2TokenEP = oAuth2TokenEP;
-            this.client_Id = clientId;
-            this.client_Secret = clientSecret;
-            this.cacheToken = cacheToken;
+            this.Claims = claims;
+            this.OAuth2TokenEndPoint = oAuth2TokenEndPoint;
+            this.ClientId = clientId;
+            this.ClientSecret = clientSecret;
+            this.CacheToken = cacheToken;
         }
+        public OAuthSecurityTokenBehavior() { }
 
         #region IClientMessageInspector
 
@@ -57,8 +58,8 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
             }
             WebHeaderCollection headers = httpRequest.Headers;
 
-            string token = cacheToken ? AppDomainHelper.TokenDictionary.GetToken(OAuth2TokenEP, client_Id, client_Secret, claims)
-                : TokenDictionary.GetNewToken(OAuth2TokenEP, client_Id, client_Secret, claims).Token;
+            string token = CacheToken ? AppDomainHelper.TokenDictionary.GetToken(OAuth2TokenEndPoint, ClientId, ClientSecret, Claims)
+                : TokenDictionary.GetNewToken(OAuth2TokenEndPoint, ClientId, ClientSecret, Claims).Token;
             //Remove the authorization header if already exists.
             headers.Remove(HttpRequestHeader.Authorization);
             headers.Add(HttpRequestHeader.Authorization, "Bearer " + token);
@@ -90,25 +91,24 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
         #endregion IEndpointBehavior
     }
 
-    public class OAuthTokenSecurityBehaviorElement : BehaviorExtensionElement
+    public class OAuthSecurityTokenBehaviorElement : BehaviorExtensionElement
     {
         public override Type BehaviorType
         {
-            get { return typeof(OAuthTokenSecurityBehavior); }
+            get { return typeof(OAuthSecurityTokenBehavior); }
         }
 
         protected override object CreateBehavior()
         {
-            return new OAuthTokenSecurityBehavior(OAuth2TokenEP, ClientId, ClientSecret, Claims, CacheToken);
+            return new OAuthSecurityTokenBehavior(OAuth2TokenEndPoint, ClientId, ClientSecret, Claims, CacheToken);
         }
 
-        [ConfigurationProperty("OAuth 2.0 Token Endpoint", IsRequired = true)]
-        public string OAuth2TokenEP
+        [ConfigurationProperty("OAuth2TokenEndPoint", IsRequired = true)]
+        public string OAuth2TokenEndPoint
         {
-            get { return (string)this["OAuth2TokenEP"]; }
-            set { this["OAuth2TokenEP"] = value; }
+            get { return (string)this["OAuth2TokenEndPoint"]; }
+            set { this["OAuth2TokenEndPoint"] = value; }
         }
-
 
         [ConfigurationProperty("ClientId", IsRequired = true)]
         public string ClientId
@@ -124,8 +124,8 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
             set { this["ClientSecret"] = value; }
         }
 
-        [ConfigurationProperty("Claims", IsRequired = false,DefaultValue ="")]
-        [RegexStringValidator(@"(\w+?=.+?(&|$))+")]
+        [ConfigurationProperty("Claims", IsRequired = false, DefaultValue = null)]
+        [RegexStringValidator(@"(^$)|((\w+?=[^&=]+?)(&\w+=[^&]+)*$)")]
         public string Claims
         {
             get { return (string)this["Claims"]; }

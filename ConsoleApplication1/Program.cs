@@ -1,9 +1,10 @@
-﻿using BizTalkComponents.CustomComponents.OAuthTokenHelper;
+﻿using BizTalkComponents.CustomComponents.AuthHelper;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using System.ServiceModel.Description;
 using System.Threading.Tasks;
+using TestAuthHelper;
 
 namespace ConsoleApplication1
 {
@@ -11,13 +12,27 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            var t= TokenHelper.GetToken("https://login.microsoftonline.com/1f2f9fd0-1fb7-43a7-bd21-67affa7442ca/oauth2/token"
-                , "2abd1d2a-9ea6-422c-982d-6bbe59b8a74f"
-                , "wks_ir.w-b_Y~Ei3q4XhM9KmPF10EyyLbn"
-                , "resource=api://ace7b17f-0573-4713-9694-b7e546a213b2"
-                //+ "&audience=api://ace7b17f-0573-4713-9694-b7e546a213b2"
-                //+ "&scope=api://ace7b17f-0573-4713-9694-b7e546a213b2/Scope"
-                );            
+            CreateSevice();
+            Console.ReadLine();
+        }
+        static ServiceHost svcHost;
+        static void CreateSevice()
+        {
+            WebHttpBinding binding = new WebHttpBinding();
+            svcHost = new ServiceHost(typeof(TestService));
+            var svcbinding = svcHost.AddServiceEndpoint(typeof(ITestService), binding, "http://localhost:1234/service");
+            svcbinding.EndpointBehaviors.Add(new WebHttpBehavior() { AutomaticFormatSelectionEnabled = true });
+            Task.Run(() => svcHost.Open());
+        }
+
+        private static void SvcHost_Faulted(object sender, EventArgs e)
+        {
+
+        }
+
+        private static void SvcHost_UnknownMessageReceived(object sender, UnknownMessageReceivedEventArgs e)
+        {
+
         }
     }
 }
