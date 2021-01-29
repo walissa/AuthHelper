@@ -8,9 +8,7 @@ AuthHelper is a custom extension that helps in authenticating calls in BizTalk, 
 | OAuthUrl | String (Required) | The OAuth2.0 server's URL |
 | Client Id | String (Required) |  self explained |
 | Client Secret | String (Required) |  self explained |
-| Claims | String (Required) |  claims must be entered in the following format: resource=http://someresource&scope=somescope... |
-| Grant Type | String (Required) |  self explained |
-| Resource | String (Required) |  self explained |
+| Claims | String (Optional) |  claims must be entered in the following format: resource=http://someresource&scope=somescope..., if the claim value contains '&' it must be replaced with %26 |
 | CacheToken | Boolean |  If True, the token will be cached |
 
 ## Installation
@@ -29,7 +27,7 @@ the extension must be added to boath .Net framework versions (32 bit and 64 bit)
 
 locate behaviorExtensions section and add the following line
 
-    <add name="AuthHelper" type="BizTalkComponents.CustomComponents.AuthHelper.OAuthTokenSecurityBehaviorElement, BizTalkComponents.CustomComponents.AuthHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8600b34c8012b7b" />
+    <add name="AuthHelper" type="BizTalkComponents.CustomComponents.AuthHelper.OAuthSecurityTokenBehaviorElement, BizTalkComponents.CustomComponents.AuthHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8600b34c8012b7b" />
 ### Adding to BizTalk Host Instance
 In BizTalk Administrator Console, go to Platform Settings --> Adapters  and select the WCF adapter you would like to add the extension to, then select the send handler you want to make the extension available with, right click on it and then select properties, Click Properties button in Adapter Handler Properties, then select WCF extensions, copy the code below to a new Xml file then click on Import.
 
@@ -37,7 +35,7 @@ In BizTalk Administrator Console, go to Platform Settings --> Adapters  and sele
 	  <system.serviceModel>
 	    <extensions>
 	      <behaviorExtensions>
-	            <add name="AuthHelper" type="BizTalkComponents.CustomComponents.AuthHelper.OAuthTokenSecurityBehaviorElement, BizTalkComponents.CustomComponents.AuthHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8600b34c8012b7b" />
+	            <add name="AuthHelper" type="BizTalkComponents.CustomComponents.AuthHelper.OAuthSecurityTokenBehaviorElement, BizTalkComponents.CustomComponents.AuthHelper, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8600b34c8012b7b" />
 	      </behaviorExtensions>
 	    </extensions>
 	  </system.serviceModel>

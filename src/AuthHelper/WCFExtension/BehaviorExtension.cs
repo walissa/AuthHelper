@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace BizTalkComponents.CustomComponents.AuthHelper
 {
-    public class OAuthTokenSecurityBehavior : IClientMessageInspector, IEndpointBehavior
+    public class OAuthSecurityTokenBehavior : IClientMessageInspector, IEndpointBehavior
     {
 
         public string OAuth2TokenEndPoint { get; set; }
@@ -22,7 +22,7 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
         public bool CacheToken { get; set; }
         public string Claims { get; set; }
 
-        public OAuthTokenSecurityBehavior(string oAuth2TokenEndPoint, string clientId, string clientSecret, string claims, bool cacheToken)
+        public OAuthSecurityTokenBehavior(string oAuth2TokenEndPoint, string clientId, string clientSecret, string claims, bool cacheToken)
         {
             this.Claims = claims;
             this.OAuth2TokenEndPoint = oAuth2TokenEndPoint;
@@ -30,7 +30,7 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
             this.ClientSecret = clientSecret;
             this.CacheToken = cacheToken;
         }
-        public OAuthTokenSecurityBehavior() { }
+        public OAuthSecurityTokenBehavior() { }
 
         #region IClientMessageInspector
 
@@ -91,16 +91,16 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
         #endregion IEndpointBehavior
     }
 
-    public class OAuthTokenSecurityBehaviorElement : BehaviorExtensionElement
+    public class OAuthSecurityTokenBehaviorElement : BehaviorExtensionElement
     {
         public override Type BehaviorType
         {
-            get { return typeof(OAuthTokenSecurityBehavior); }
+            get { return typeof(OAuthSecurityTokenBehavior); }
         }
 
         protected override object CreateBehavior()
         {
-            return new OAuthTokenSecurityBehavior(OAuth2TokenEndPoint, ClientId, ClientSecret, Claims, CacheToken);
+            return new OAuthSecurityTokenBehavior(OAuth2TokenEndPoint, ClientId, ClientSecret, Claims, CacheToken);
         }
 
         [ConfigurationProperty("OAuth2TokenEndPoint", IsRequired = true)]
@@ -109,7 +109,6 @@ namespace BizTalkComponents.CustomComponents.AuthHelper
             get { return (string)this["OAuth2TokenEndPoint"]; }
             set { this["OAuth2TokenEndPoint"] = value; }
         }
-
 
         [ConfigurationProperty("ClientId", IsRequired = true)]
         public string ClientId

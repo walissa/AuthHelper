@@ -13,7 +13,7 @@ namespace TestAuthHelper
         [TestMethod]
         public void TestSetNullOrEmptyClaims()
         {
-            var elm = new OAuthTokenSecurityBehaviorElement();
+            var elm = new OAuthSecurityTokenBehaviorElement();
             elm.Claims = null;
             elm.Claims = "";
         }
@@ -21,7 +21,7 @@ namespace TestAuthHelper
         [TestMethod(),ExpectedException(typeof(System.Configuration.ConfigurationErrorsException))]
         public void TestSetWrongClaims()
         {
-            var elm = new OAuthTokenSecurityBehaviorElement();
+            var elm = new OAuthSecurityTokenBehaviorElement();
             elm.Claims = "Abc=Test&aa";
         }        
 
@@ -30,7 +30,7 @@ namespace TestAuthHelper
         {
             var binding = new WebHttpBinding();
             var factory = new ChannelFactory<ITestService>(binding, new EndpointAddress("http://localhost:1234"));
-            OAuthTokenSecurityBehavior behavior = new OAuthTokenSecurityBehavior
+            OAuthSecurityTokenBehavior behavior = new OAuthSecurityTokenBehavior
             {
                 OAuth2TokenEndPoint = "http://localhost:1234/GetToken",
                 ClientId = "myclientId",
